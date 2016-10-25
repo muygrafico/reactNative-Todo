@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableHighlight,
   View
 } from 'react-native';
 
@@ -40,6 +41,16 @@ const styles = StyleSheet.create({
     height: 50,
     borderColor: 'gray',
     borderWidth: 1
+  },
+  button: {
+
+    top: 60,
+    backgroundColor: '#00BFFF',
+    width: 100,
+    borderRadius: 50,
+    padding: 10,
+    textAlign: 'center'
+
   }
 
 });
@@ -57,6 +68,7 @@ export default class todoApp extends Component {
 
   handleInputChange(text) {
     const newTodo = text
+    console.warn(text)
     this.setState({
       newTodo: newTodo
     })
@@ -73,6 +85,9 @@ export default class todoApp extends Component {
             onChangeText={this.handleInputChange.bind(this)}
             placeholder="Todo"
           />
+          <TouchableHighlight onPress={this._onPressButton}>
+            <Text style={styles.button}>Add to do</Text>
+          </TouchableHighlight>
         </View>
       </View>
     );
