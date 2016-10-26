@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -11,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableHighlight,
+  ListView,
   View
 } from 'react-native';
 
@@ -21,43 +16,43 @@ const styles = StyleSheet.create({
     backgroundColor: 'tomato',
   },
   header: {
-    textAlign: 'center',
-    fontWeight: '300',
+    alignItems: 'center',
     color: 'brown',
     fontSize: 30,
-    paddingTop:30,
+    fontWeight: '300',
     paddingBottom: 30,
-    alignItems: 'center'
+    paddingTop:30,
+    textAlign: 'center',
   },
   input: {
-   height: 40,
-   borderColor: '#A92F30',
    backgroundColor: 'tomato',
-   color: '#803033',
+   borderColor: '#A92F30',
    borderWidth: 1,
+   color: '#803033',
+   height: 40,
    marginLeft: 30,
    marginRight: 30,
    paddingLeft: 15,
-   paddingRight: 15
+   paddingRight: 15,
   },
   button: {
-    height: 40,
-    flex: 1,
-    flexDirection: 'row',
+    alignSelf: 'stretch',
     backgroundColor: '#503033',
     borderColor: '#A92F30',
     borderWidth: 1,
-    marginTop: 10,
+    flex: 1,
+    flexDirection: 'row',
+    height: 40,
+    justifyContent: 'center',
     marginBottom: 30,
     marginLeft: 30,
     marginRight: 30,
-    alignSelf: 'stretch',
-    justifyContent: 'center'
+    marginTop: 10,
   },
   buttonText: {
-    fontSize: 18,
+    alignSelf: 'center',
     color:'tomato',
-    alignSelf: 'center'
+    fontSize: 18,
   }
 
 });
@@ -67,10 +62,14 @@ export default class todoApp extends Component {
 
   constructor() {
     super()
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
     this.state = {
       todos: [],
-      newTodo: ''
+      newTodo: '',
+      dataSource: ds.cloneWithRows(['a','b'])
     }
+
   }
 
   handleInputChange(text) {
@@ -83,6 +82,19 @@ export default class todoApp extends Component {
   handleAddTodoClick(text){
     console.log(text)
   }
+
+
+  renderTodo(todo, i) {
+    return (
+      <View key={todo.id} style={styles.todo}>
+        <Text style={styles.todoText}>
+          - {todo.text}
+        </Text>
+
+      </View>
+    )
+  }
+
 
   render() {
     return (
@@ -104,6 +116,12 @@ export default class todoApp extends Component {
               <Text style={styles.buttonText}>Add todo</Text>
             </TouchableHighlight>
 
+        </View>
+        <View>
+          <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(rowData) => <Text>{rowData}</Text>}
+          />
         </View>
 
       </View>
