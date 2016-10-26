@@ -18,39 +18,46 @@ import {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
     backgroundColor: 'tomato',
-    height: 120
   },
   header: {
     textAlign: 'center',
     fontWeight: '300',
     color: 'brown',
     fontSize: 30,
-    top: 30,
+    paddingTop:30,
+    paddingBottom: 30,
     alignItems: 'center'
   },
   input: {
-    top: 50,
-    alignSelf: 'stretch',
-    backgroundColor: 'white',
-    paddingLeft: 15,
-    paddingRight: 15,
-    margin: 5,
-    height: 50,
-    borderColor: 'gray',
-    borderWidth: 1
+   height: 40,
+   borderColor: '#A92F30',
+   backgroundColor: 'tomato',
+   color: '#803033',
+   borderWidth: 1,
+   marginLeft: 30,
+   marginRight: 30,
+   paddingLeft: 15,
+   paddingRight: 15
   },
   button: {
-
-    top: 60,
-    backgroundColor: '#00BFFF',
-    width: 100,
-    borderRadius: 50,
-    padding: 10,
-    textAlign: 'center'
-
+    height: 40,
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#503033',
+    borderColor: '#A92F30',
+    borderWidth: 1,
+    marginTop: 10,
+    marginBottom: 30,
+    marginLeft: 30,
+    marginRight: 30,
+    alignSelf: 'stretch',
+    justifyContent: 'center'
+  },
+  buttonText: {
+    fontSize: 18,
+    color:'tomato',
+    alignSelf: 'center'
   }
 
 });
@@ -68,10 +75,13 @@ export default class todoApp extends Component {
 
   handleInputChange(text) {
     const newTodo = text
-    console.warn(text)
     this.setState({
       newTodo: newTodo
     })
+  }
+
+  handleAddTodoClick(text){
+    console.log(text)
   }
 
   render() {
@@ -79,16 +89,23 @@ export default class todoApp extends Component {
       <View>
         <View style={styles.container}>
           <Text style={styles.header}>Awesome Todo App</Text>
-          <TextInput
-            style={styles.input}
-            value={this.state.newTodo}
-            onChangeText={this.handleInputChange.bind(this)}
-            placeholder="Todo"
-          />
-          <TouchableHighlight onPress={this._onPressButton}>
-            <Text style={styles.button}>Add to do</Text>
-          </TouchableHighlight>
+
+            <TextInput
+              style={styles.input}
+              value={this.state.newTodo}
+              onChangeText={this.handleInputChange.bind(this)}
+              placeholder="Todo"
+            />
+
+            <TouchableHighlight
+              style={styles.button}
+              onPress={this.handleAddTodoClick.bind(this)}
+            >
+              <Text style={styles.buttonText}>Add todo</Text>
+            </TouchableHighlight>
+
         </View>
+
       </View>
     );
   }
