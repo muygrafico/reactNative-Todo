@@ -7,6 +7,7 @@ import {
   TouchableHighlight,
   ListView,
   Image,
+  Switch,
   View
 } from 'react-native';
 
@@ -104,22 +105,43 @@ class Todo extends React.Component {
     fetch(`http://localhost:3001/todos/${this.props.id}`, {
       method: "DELETE",
     })
-      .then((todo) => {
-        this.props.howToUpdate();
+    .then((todo) => {
+      this.props.howToUpdate();
+    })
+  }
 
-        // const todos = this.state.todos.filter(todo => todo.id !== id)
-        // this.setState({
-        //   todos: todos
-        // })
-      })
+  handleToggleTodo(value) {
+
+
+
+    const todo = {text: this.props.text, done: value, id: this.props.id}
+    console.log(JSON.stringify(todo))
+
+    fetch(`http://localhost:3001/todos/${this.props.id}`, {
+      method: "PUT",
+      body: JSON.stringify(todo),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then((todo) => {
+      this.props.howToUpdate();
+    })
   }
 
   render() {
     return (
         <View key={this.props.id} style={todoStyles.container}>
+
+          <Switch
+          value={this.props.done}
+          onValueChange={(value) => this.handleToggleTodo(value) }
+          />
+
           <Text style={todoStyles.text}>
             {this.props.text}
           </Text>
+
           <TouchableHighlight
             onPress={this.handleDeleteClick.bind(this)}
             style={todoStyles.button}>
