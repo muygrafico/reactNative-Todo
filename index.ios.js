@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableHighlight,
   ListView,
+  Image,
   View
 } from 'react-native';
 
@@ -57,19 +58,73 @@ const styles = StyleSheet.create({
 
 });
 
+const rowStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  text: {
+    marginLeft: 12,
+    fontSize: 16,
+  },
+  photo: {
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+  },
+});
+
+const Row = (props) => (
+  <View style={rowStyles.container}>
+    <Text style={rowStyles.text}>
+      {`${props.text}`}
+    </Text>
+  </View>
+);
+
 
 export default class todoApp extends Component {
 
-  constructor() {
-    super()
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+  // constructor() {
+  //   super()
+  //   const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+  //   this.state = {
+  //     todos: [],
+  //     newTodo: '',
+  //     dataSource: ds.cloneWithRows([''])
+  //   }
+  // }
 
-    this.state = {
-      todos: [],
-      newTodo: '',
-      dataSource: ds.cloneWithRows(['a','b'])
+    constructor() {
+     super();
+     this.state = {
+       dataSource: new ListView.DataSource({
+         rowHasChanged: (row1, row2) => row1 !== row2,
+       }),
+       loaded: false,
+     };
+   }
+
+
+   fetchData() {
+    fetch('http://localhost:3001/todos')
+      .then((response) => response.json())
+      // .then((responseData) => {
+      //   this.setState({
+      //     dataSource: this.state.dataSource.cloneWithRows(responseData),
+      //     loaded: true,
+      //   });
+      // })
+      // .done();
+      .then((responseData) => this.setState({dataSource: this.state.dataSource.cloneWithRows(responseData)}))
+      .done()
     }
 
+
+  componentDidMount() {
+    this.fetchData();
   }
 
   handleInputChange(text) {
@@ -120,7 +175,8 @@ export default class todoApp extends Component {
         <View>
           <ListView
           dataSource={this.state.dataSource}
-          renderRow={(rowData) => <Text>{rowData}</Text>}
+          // renderRow={(rowData) => <Text>{rowData}</Text>}
+          renderRow={(data) => <Row {...data} />}
           />
         </View>
 
