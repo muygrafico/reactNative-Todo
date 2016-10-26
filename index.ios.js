@@ -76,52 +76,34 @@ const rowStyles = StyleSheet.create({
   },
 });
 
-const Row = (props) => (
-  <View style={rowStyles.container}>
+const Todo = (props) => (
+  <View key={props.id} style={rowStyles.container}>
     <Text style={rowStyles.text}>
-      {`${props.text}`}
+      {`- ${props.text}`}
     </Text>
   </View>
 );
 
 
+
+
 export default class todoApp extends Component {
 
-  // constructor() {
-  //   super()
-  //   const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-  //   this.state = {
-  //     todos: [],
-  //     newTodo: '',
-  //     dataSource: ds.cloneWithRows([''])
-  //   }
-  // }
+  constructor() {
+    super();
+    this.state = {
+      dataSource: new ListView.DataSource({ rowHasChanged: (row1, row2) => row1 !== row2 })
+    };
+  }
 
-    constructor() {
-     super();
-     this.state = {
-       dataSource: new ListView.DataSource({
-         rowHasChanged: (row1, row2) => row1 !== row2,
-       }),
-       loaded: false,
-     };
-   }
-
-
-   fetchData() {
+  fetchData() {
     fetch('http://localhost:3001/todos')
-      .then((response) => response.json())
-      // .then((responseData) => {
-      //   this.setState({
-      //     dataSource: this.state.dataSource.cloneWithRows(responseData),
-      //     loaded: true,
-      //   });
-      // })
-      // .done();
-      .then((responseData) => this.setState({dataSource: this.state.dataSource.cloneWithRows(responseData)}))
-      .done()
-    }
-
+    .then((response) => response.json())
+    .then((responseData) =>
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(responseData)
+    }))
+  }
 
   componentDidMount() {
     this.fetchData();
@@ -134,20 +116,13 @@ export default class todoApp extends Component {
     })
   }
 
-  handleAddTodoClick(text){
-    console.log(text)
-  }
-
-
-  renderTodo(todo, i) {
-    return (
-      <View key={todo.id} style={styles.todo}>
-        <Text style={styles.todoText}>
-          - {todo.text}
-        </Text>
-
-      </View>
-    )
+  handleAddTodoClick(id){
+    console.log(id)
+    const todos = this.state.dataSource._dataBlob.s1
+    console.log(todos)
+    // const todo = todos.find((todo) => todo.id === id)
+    // todo.done = !todo.done
+    // alert(todo)
   }
 
 
@@ -175,8 +150,7 @@ export default class todoApp extends Component {
         <View>
           <ListView
           dataSource={this.state.dataSource}
-          // renderRow={(rowData) => <Text>{rowData}</Text>}
-          renderRow={(data) => <Row {...data} />}
+          renderRow={(data) => <Todo {...data} />}
           />
         </View>
 
