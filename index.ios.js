@@ -116,7 +116,7 @@ export default class todoApp extends Component {
     })
   }
 
-  handleAddTodoClick(id){
+  handleTodoClick(id){
     console.log(id)
     const todos = this.state.dataSource._dataBlob.s1
     console.log(todos)
@@ -124,6 +124,28 @@ export default class todoApp extends Component {
     // todo.done = !todo.done
     // alert(todo)
   }
+
+  handleAddTodoClick() {
+  const todo = {
+    text: this.state.newTodo,
+    done: false,
+  }
+  console.log(todo)
+  fetch('http://localhost:3001/todos', {
+    method: "POST",
+    body: JSON.stringify(todo),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+    .then((data) => data.json())
+    .then((todo) => {
+      this.setState({
+        newTodo: ''
+      })
+      this.fetchData()
+    })
+}
 
 
   render() {
