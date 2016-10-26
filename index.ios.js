@@ -58,29 +58,45 @@ const styles = StyleSheet.create({
 
 });
 
-const rowStyles = StyleSheet.create({
+const todoStyles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 12,
     flexDirection: 'row',
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#DADADA'
   },
   text: {
     marginLeft: 12,
     fontSize: 16,
   },
-  photo: {
-    height: 40,
-    width: 40,
-    borderRadius: 20,
+  button: {
+    position: 'absolute',
+    right:15,
+    height: 18,
+    width: 18,
+    borderColor: 'tomato',
+    borderRadius: 18,
+    borderWidth: 1,
+  },
+  buttonText: {
+    color: 'tomato',
+    fontSize: 12,
+    textAlign: 'center'
   },
 });
 
 const Todo = (props) => (
-  <View key={props.id} style={rowStyles.container}>
-    <Text style={rowStyles.text}>
-      {`- ${props.text}`}
+  <View key={props.id} style={todoStyles.container}>
+    <Text style={todoStyles.text}>
+      {props.text}
     </Text>
+    <TouchableHighlight
+    
+    style={todoStyles.button}>
+      <Text style={todoStyles.buttonText}>X</Text>
+    </TouchableHighlight>
   </View>
 );
 
