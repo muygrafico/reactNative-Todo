@@ -87,19 +87,49 @@ const todoStyles = StyleSheet.create({
   },
 });
 
-const Todo = (props) => (
-  <View key={props.id} style={todoStyles.container}>
-    <Text style={todoStyles.text}>
-      {props.text}
-    </Text>
-    <TouchableHighlight
-    
-    style={todoStyles.button}>
-      <Text style={todoStyles.buttonText}>X</Text>
-    </TouchableHighlight>
-  </View>
-);
 
+class Todo extends React.Component {
+
+  fetchData() {
+    fetch('http://localhost:3001/todos')
+    .then((response) => response.json())
+    .then((responseData) =>
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(responseData)
+    }))
+  }
+
+  handleDeleteClick(id) {
+    console.log(this.props.id)
+    fetch(`http://localhost:3001/todos/${this.props.id}`, {
+      method: "DELETE",
+    })
+      .then((todo) => {
+        this.props.howToUpdate();
+
+        // const todos = this.state.todos.filter(todo => todo.id !== id)
+        // this.setState({
+        //   todos: todos
+        // })
+      })
+  }
+
+  render() {
+    return (
+        <View key={this.props.id} style={todoStyles.container}>
+          <Text style={todoStyles.text}>
+            {this.props.text}
+          </Text>
+          <TouchableHighlight
+            onPress={this.handleDeleteClick.bind(this)}
+            style={todoStyles.button}>
+
+            <Text style={todoStyles.buttonText}>X</Text>
+          </TouchableHighlight>
+        </View>
+    )
+  }
+}
 
 
 
@@ -132,21 +162,12 @@ export default class todoApp extends Component {
     })
   }
 
-  handleTodoClick(id){
-    console.log(id)
-    const todos = this.state.dataSource._dataBlob.s1
-    console.log(todos)
-    // const todo = todos.find((todo) => todo.id === id)
-    // todo.done = !todo.done
-    // alert(todo)
-  }
-
   handleAddTodoClick() {
   const todo = {
     text: this.state.newTodo,
     done: false,
   }
-  console.log(todo)
+
   fetch('http://localhost:3001/todos', {
     method: "POST",
     body: JSON.stringify(todo),
@@ -188,7 +209,7 @@ export default class todoApp extends Component {
         <View>
           <ListView
           dataSource={this.state.dataSource}
-          renderRow={(data) => <Todo {...data} />}
+          renderRow={(data) => <Todo howToUpdate={this.fetchData.bind(this)} {...data} />}
           />
         </View>
 
